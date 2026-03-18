@@ -70,7 +70,7 @@
             <div id="logoCircle" class="logo-placeholder">
                 <img src="swlogo.png" alt="School Logo" onerror="this.src='https://via.placeholder.com/100?text=SW'" class="w-full h-full object-contain">
             </div>
-            <h1 class="text-2xl md:text-3xl font-bold">ระบบค้นหาเลขที่นั่งสอบและห้องสอบ</h1>
+            <h1 class="text-2xl md:text-3xl font-bold">ระบบค้นหาห้องสอบ</h1>
             <p id="headerSub" class="text-xl font-semibold uppercase mt-2">ระดับชั้นมัธยมศึกษาปีที่ 1 และ 4</p>
             <p class="text-sm md:text-base opacity-90 mt-2">โรงเรียนสามร้อยยอดวิทยาคม</p>
         </div>
@@ -109,7 +109,7 @@
                         <div id="resLevelBadge" class="level-badge-large">ระดับชั้น ม.x</div>
                         <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mt-2" id="resFullName">ชื่อ-นามสกุล</h2>
                         <div class="mt-4 space-y-1 text-gray-500">
-                            <p class="text-lg font-semibold" id="resIdCard">เลขประจำตัวประชาชน: -</p>
+                            <!-- Removed resIdCard p tag according to request -->
                             <p class="text-sm" id="resRegDate">วันที่ลงทะเบียน: -</p>
                         </div>
                     </div>
@@ -179,7 +179,9 @@
     </main>
 
     <footer class="max-w-6xl mx-auto w-full text-center py-10 text-gray-400 text-sm">
-        <p>© โรงเรียนสามร้อยยอดวิทยาคม</p>
+        <p>พัฒนาเว็บไซต์โดย กลุ่มบริหารงานวิชาการ</p>
+        <p>โรงเรียนสามร้อยยอดวิทยาคม</p>
+        <p>Ver 1.4.1</p>
     </footer>
 
     <script>
@@ -189,7 +191,7 @@
             M1: {
                 date: "28 มีนาคม พ.ศ.2569",
                 subjects: [
-                    { id: 1, name: "รายวิชา คณิิตศาสตร์", time: "08.00 - 08.50 น." },
+                    { id: 1, name: "รายวิชา คณิตศาสตร์", time: "08.00 - 08.50 น." },
                     { id: 2, name: "รายวิชา วิทยาศาสตร์", time: "08.50 - 09.40 น." },
                     { id: 3, name: "รายวิชา ภาษาอังกฤษ", time: "09.40 - 10.25 น." },
                     { id: 4, name: "รายวิชา ภาษาไทย", time: "10.25 - 11.10 น." },
@@ -321,7 +323,7 @@
             }
 
             document.getElementById('resFullName').innerText = `${data.prefix || ''}${data.firstname || ''} ${data.lastname || ''}`;
-            document.getElementById('resIdCard').innerText = `เลขประจำตัวประชาชน: ${data.idCard || '-'}`;
+            // resIdCard logic removed from script as the element is gone
             document.getElementById('resRegDate').innerText = `วันที่ลงทะเบียน: ${formatThaiDateTime(data.regDate)}`;
             
             document.getElementById('resExamId').innerText = data.examId || '--';
