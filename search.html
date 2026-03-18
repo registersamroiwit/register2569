@@ -29,11 +29,8 @@
         main { flex: 1; }
 
         /* Dynamic Theme Classes */
-        /* ธีมหน้าแรก: เปลี่ยนเป็นสีเขียวมรกต (Emerald) */
         .theme-default { --theme-color: #059669; --theme-dark: #047857; --theme-bg: #ecfdf5; --theme-text: #064e3b; }
-        /* ธีม ม.1: สีน้ำเงิน */
         .theme-m1 { --theme-color: #3b82f6; --theme-dark: #1d4ed8; --theme-bg: #eff6ff; --theme-text: #1e3a8a; }
-        /* ธีม ม.4: สีส้ม */
         .theme-m4 { --theme-color: #f97316; --theme-dark: #c2410c; --theme-bg: #fff7ed; --theme-text: #7c2d12; }
 
         .dynamic-header { background-color: var(--theme-color); color: white; transition: background-color 0.3s; }
@@ -109,7 +106,6 @@
                         <div id="resLevelBadge" class="level-badge-large">ระดับชั้น ม.x</div>
                         <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mt-2" id="resFullName">ชื่อ-นามสกุล</h2>
                         <div class="mt-4 space-y-1 text-gray-500">
-                            <!-- Removed resIdCard p tag according to request -->
                             <p class="text-sm" id="resRegDate">วันที่ลงทะเบียน: -</p>
                         </div>
                     </div>
@@ -153,7 +149,7 @@
                                         <tr>
                                             <th class="w-12">ที่</th>
                                             <th>รายวิชา</th>
-                                            <th class="text-right">เวลาสอบ</th>
+                                            <th class="text-center">เวลาสอบ</th>
                                         </tr>
                                     </thead>
                                     <tbody id="scheduleBody"></tbody>
@@ -163,10 +159,9 @@
                     </div>
 
                     <div class="p-3 bg-gray-50 rounded-xl border border-gray-200 italic text-gray-500 text-center">
-                        <p class="text-xl font-bold">⚠️ ขอให้นักเรียนมาถึงสนามสอบก่อนเวลา 30 นาที ⚠️</p>
+                        <p class="text-xl font-bold">⚠️ ให้นักเรียนมาถึงสนามสอบก่อนเวลา 30 นาที ⚠️</p>
                         <p class="text-base">โปรดแต่งกายด้วยชุดนักเรียนที่ถูกต้องตามระเบียบของสถานศึกษาเดิม</p>
                     </div>
-                    
                 </div>
             </div>
 
@@ -219,80 +214,52 @@
         const resultSection = document.getElementById('resultSection');
         const errorMessage = document.getElementById('errorMessage');
         const bodyTheme = document.getElementById('bodyTheme');
-        const logoCircle = document.getElementById('logoCircle');
 
         function formatThaiDateTime(dateString) {
             if (!dateString) return "-";
             try {
                 const date = new Date(dateString);
                 if (isNaN(date.getTime())) return dateString; 
-
-                const thaiDate = new Intl.DateTimeFormat('th-TH', {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric',
-                }).format(date);
-
-                const thaiTime = new Intl.DateTimeFormat('th-TH', {
-                    hour: '2-digit',
-                    minute: '2-digit',
-                    hour12: false
-                }).format(date);
-
+                const thaiDate = new Intl.DateTimeFormat('th-TH', { year: 'numeric', month: 'long', day: 'numeric' }).format(date);
+                const thaiTime = new Intl.DateTimeFormat('th-TH', { hour: '2-digit', minute: '2-digit', hour12: false }).format(date);
                 return `${thaiDate} เวลา ${thaiTime} น.`;
-            } catch (e) {
-                return dateString;
-            }
+            } catch (e) { return dateString; }
         }
 
         searchForm.onsubmit = async (e) => {
             e.preventDefault();
             const query = String(searchInput.value).trim();
             if (!query) return;
-
             hideError();
             showLoading(true);
-
             try {
                 const finalURL = `${scriptURL}?action=lookup&query=${encodeURIComponent(query)}&t=${Date.now()}`;
                 const response = await fetch(finalURL);
-
                 if (!response.ok) throw new Error('Network response was not ok');
                 const result = await response.json();
-
                 if (result.status === "success" && result.data) {
                     showResult(result.data);
                 } else {
                     showError("ไม่พบข้อมูล!", "เลขประจำตัวประชาชนหรือเลขที่นั่งสอบไม่ถูกต้อง");
                 }
             } catch (err) {
-                console.error("Connection Error:", err);
-                showError("การเชื่อมต่อขัดข้อง", "ไม่สามารถติดต่อฐานข้อมูลได้ โปรดลองอีกครั้งในภายหลัง");
-            } finally {
-                showLoading(false);
-            }
+                showError("การเชื่อมต่อขัดข้อง", "ไม่สามารถติดต่อฐานข้อมูลได้");
+            } finally { showLoading(false); }
         };
 
-        function showLoading(isLoading) {
-            loadingOverlay.style.display = isLoading ? 'flex' : 'none';
-        }
-
+        function showLoading(isLoading) { loadingOverlay.style.display = isLoading ? 'flex' : 'none'; }
         function showError(title, detail) {
             document.getElementById('errorTitle').innerText = title;
             document.getElementById('errorDetail').innerText = detail;
             errorMessage.classList.remove('hidden');
         }
-
-        function hideError() {
-            errorMessage.classList.add('hidden');
-        }
+        function hideError() { errorMessage.classList.add('hidden'); }
 
         function showResult(data) {
             const examId = String(data.examId || "");
             const levelBadge = document.getElementById('resLevelBadge');
             const scheduleBody = document.getElementById('scheduleBody');
             const scheduleDateHeader = document.getElementById('scheduleDateHeader');
-            
             let selectedSchedule = null;
 
             if (examId.startsWith('1')) {
@@ -317,7 +284,7 @@
                     <tr>
                         <td class="text-gray-400 font-medium">${s.id}</td>
                         <td class="font-semibold text-gray-700">${s.name}</td>
-                        <td class="text-right font-bold text-gray-600">${s.time}</td>
+                        <td class="text-center font-bold text-gray-600">${s.time}</td>
                     </tr>
                 `).join('');
             } else {
@@ -325,9 +292,7 @@
             }
 
             document.getElementById('resFullName').innerText = `${data.prefix || ''}${data.firstname || ''} ${data.lastname || ''}`;
-            // resIdCard logic removed from script as the element is gone
             document.getElementById('resRegDate').innerText = `วันที่ลงทะเบียน: ${formatThaiDateTime(data.regDate)}`;
-            
             document.getElementById('resExamId').innerText = data.examId || '--';
             document.getElementById('resOrder').innerText = data.order || '--';
             document.getElementById('resBuilding').innerText = data.building || '-';
