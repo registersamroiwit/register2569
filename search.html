@@ -49,7 +49,7 @@
             background-color: white;
         }
 
-        .schedule-table th { background-color: var(--theme-bg); color: var(--theme-text); text-align: left; padding: 12px; }
+        .schedule-table th { background-color: var(--theme-bg); color: var(--theme-text); padding: 12px; }
         .schedule-table td { padding: 12px; border-bottom: 1px solid var(--theme-bg); }
     </style>
 </head>
@@ -144,12 +144,12 @@
                                 วันที่สอบ: --
                             </div>
                             <div class="overflow-x-auto">
-                                <table class="w-full schedule-table text-sm md:text-base">
+                                <table class="w-full schedule-table text-sm md:text-base border-collapse">
                                     <thead>
                                         <tr>
-                                            <th class="w-12">ที่</th>
-                                            <th>รายวิชา</th>
-                                            <th class="text-center">เวลาสอบ</th>
+                                            <th class="w-[10%] text-center">ที่</th>
+                                            <th class="w-[50%] text-left">รายวิชา</th>
+                                            <th class="w-[40%] text-center">เวลาสอบ</th>
                                         </tr>
                                     </thead>
                                     <tbody id="scheduleBody"></tbody>
@@ -282,8 +282,8 @@
                 scheduleDateHeader.innerText = `วันที่สอบ: ${selectedSchedule.date}`;
                 scheduleBody.innerHTML = selectedSchedule.subjects.map(s => `
                     <tr>
-                        <td class="text-gray-400 font-medium">${s.id}</td>
-                        <td class="font-semibold text-gray-700">${s.name}</td>
+                        <td class="text-center text-gray-400 font-medium">${s.id}</td>
+                        <td class="text-left font-semibold text-gray-700">${s.name}</td>
                         <td class="text-center font-bold text-gray-600">${s.time}</td>
                     </tr>
                 `).join('');
