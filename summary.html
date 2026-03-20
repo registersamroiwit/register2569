@@ -299,16 +299,52 @@
             document.getElementById('barMale').style.width = percMale + '%';
             document.getElementById('barFemale').style.width = percFemale + '%';
 
-            // สถิติรายแผนการเรียน
+            // --- แก้ไขส่วนการเรียงลำดับแผนการเรียนตามเงื่อนไขใหม่ ---
             const planContainer = document.getElementById('planContainer');
             planContainer.innerHTML = '';
+            
             if (data.plans) {
+                // กำหนดลำดับแผนการเรียนที่ต้องการ
+                let orderedPlans = [];
+                if (currentLevel === 'M1') {
+                    orderedPlans = [
+                        "วิทย์ - คณิต Intensive",
+                        "วิทย์ - คณิต",
+                        "ศิลป์อาชีพ",
+                        "ศิลปกรรม",
+                        "กีฬา"
+                    ];
+                } else {
+                    orderedPlans = [
+                        "วิทย์ - คณิต Intensive",
+                        "วิทย์ - คณิต",
+                        "ศิลป์ - คณิต Intensive",
+                        "รัฐศาสตร์ - นิติศาสตร์",
+                        "ศิลป์ - ภาษาจีน",
+                        "นิเทศ – ศิลป์"
+                    ];
+                }
+
+                // วนลูปตามลำดับที่กำหนดไว้
+                orderedPlans.forEach(plan => {
+                    if (data.plans[plan] !== undefined) {
+                        const count = data.plans[plan];
+                        const div = document.createElement('div');
+                        div.className = "bg-white border border-gray-100 p-3 rounded-xl flex flex-col items-center justify-center text-center shadow-sm hover:shadow-md transition-shadow min-w-[140px] max-w-[160px]";
+                        div.innerHTML = `<span class="text-[10px] font-bold text-gray-400 uppercase leading-tight h-8 flex items-center justify-center mb-1">${plan}</span><span class="text-xl font-black text-emerald-600">${count.toLocaleString()}</span><span class="text-[9px] text-gray-300">คน</span>`;
+                        planContainer.appendChild(div);
+                    }
+                });
+
+                // ตรวจสอบเผื่อกรณีมีแผนการเรียนอื่นที่ไม่ได้อยู่ใน List (เพื่อความปลอดภัยของข้อมูล)
                 Object.keys(data.plans).forEach(plan => {
-                    const count = data.plans[plan];
-                    const div = document.createElement('div');
-                    div.className = "bg-white border border-gray-100 p-3 rounded-xl flex flex-col items-center justify-center text-center shadow-sm hover:shadow-md transition-shadow min-w-[140px] max-w-[160px]";
-                    div.innerHTML = `<span class="text-[10px] font-bold text-gray-400 uppercase leading-tight h-8 flex items-center justify-center mb-1">${plan}</span><span class="text-xl font-black text-emerald-600">${count.toLocaleString()}</span><span class="text-[9px] text-gray-300">คน</span>`;
-                    planContainer.appendChild(div);
+                    if (!orderedPlans.includes(plan)) {
+                        const count = data.plans[plan];
+                        const div = document.createElement('div');
+                        div.className = "bg-white border border-gray-100 p-3 rounded-xl flex flex-col items-center justify-center text-center shadow-sm hover:shadow-md transition-shadow min-w-[140px] max-w-[160px]";
+                        div.innerHTML = `<span class="text-[10px] font-bold text-gray-400 uppercase leading-tight h-8 flex items-center justify-center mb-1">${plan}</span><span class="text-xl font-black text-emerald-600">${count.toLocaleString()}</span><span class="text-[9px] text-gray-300">คน</span>`;
+                        planContainer.appendChild(div);
+                    }
                 });
             }
 
