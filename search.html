@@ -122,10 +122,17 @@
                     </div>
 
                     <div class="bg-white p-6 rounded-2xl shadow-sm border-2 border-gray-50 space-y-4">
+                        <!-- แผนการเรียน -->
+                        <div class="flex justify-between items-center border-b border-gray-50 pb-3">
+                            <span class="text-gray-500 font-bold uppercase text-xs">แผนการเรียนอันดับ 1</span>
+                            <span id="resPlan" class="font-bold text-xl text-gray-800">-</span>
+                        </div>
+                        <!-- อาคารสอบ -->
                         <div class="flex justify-between items-center border-b border-gray-50 pb-3">
                             <span class="text-gray-500 font-bold uppercase text-xs">อาคารสอบ</span>
                             <span id="resBuilding" class="font-bold text-xl text-gray-800">-</span>
                         </div>
+                        <!-- ห้องสอบ -->
                         <div class="flex justify-between items-center">
                             <span class="text-gray-500 font-bold uppercase text-xs">ห้องสอบ</span>
                             <span id="resRoom" class="font-bold text-xl text-gray-800">-</span>
@@ -294,9 +301,17 @@
             document.getElementById('resFullName').innerText = `${data.prefix || ''}${data.firstname || ''} ${data.lastname || ''}`;
             document.getElementById('resRegDate').innerText = `วันที่ลงทะเบียน: ${formatThaiDateTime(data.regDate)}`;
             document.getElementById('resExamId').innerText = data.examId || '--';
-            document.getElementById('resOrder').innerText = data.order || '--';
-            document.getElementById('resBuilding').innerText = data.building || '-';
-            document.getElementById('resRoom').innerText = data.room || '-';
+
+            // ส่วนที่แก้ไขเพื่อความแม่นยำ: ค้นหาข้อมูลจากชื่อตัวแปรที่ Apps Script อาจจะส่งมา
+            const orderVal = data.order || data.ลำดับ || data.ลำดับที่ || data['ลำดับที่'] || '--';
+            const planVal = data.แผนการเรียน || data.plan || data['แผนการเรียน'] || '-';
+            const buildingVal = data.อาคาร || data.อาคารสอบ || data.building || data['อาคาร'] || '-';
+            const roomVal = data.ห้องสอบ || data.room || data['ห้องสอบ'] || '-';
+
+            document.getElementById('resOrder').innerText = orderVal;
+            document.getElementById('resPlan').innerText = planVal;
+            document.getElementById('resBuilding').innerText = buildingVal;
+            document.getElementById('resRoom').innerText = roomVal;
 
             searchSection.classList.add('hidden');
             resultSection.classList.remove('hidden');
